@@ -19,7 +19,8 @@ dev-dependencies = []
 
 [tool.rye.scripts]
 start = "python src/static_site_generator/server.py --dir public"
-
+script = "python src/static_site_generator/main.py"
+test = "python -m unittest discover -s src/tests"
 
 [tool.hatch.metadata]
 allow-direct-references = true
