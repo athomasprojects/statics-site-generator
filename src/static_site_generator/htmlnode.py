@@ -1,23 +1,22 @@
 import dataclasses
 from typing import Optional
 
-import static_site_generator.htmltag as HtmlTag
+from static_site_generator.htmltag import HtmlTag
 from static_site_generator.htmlattribute import HtmlAttribute
-from static_site_generator import util
 
 
 @dataclasses.dataclass(slots=True)
 class HtmlNode:
-    tag: Optional[str] = None
-    value: Optional[str] = None
-    children: Optional[list["HtmlNode"]] = None
-    props: Optional[dict[str, str]] = None
+    tag: Optional[str]
+    value: Optional[str]
+    children: Optional[list["HtmlNode"]]
+    props: Optional[dict[str, str]]
 
-    def __init__(self, tag, value, children, props):
+    def __init__(self, tag=None, value=None, children=None, props=None):
         match tag:
             case None:
                 self.tag = tag
-            case str() if HtmlTag.is_tag(tag):
+            case str() as tag if HtmlTag.is_tag(tag):
                 self.tag = tag
             case _:
                 raise ValueError(f"Invalid `tag`: {tag}")
@@ -39,16 +38,34 @@ class HtmlNode:
                 self.value = v
                 self.children = c
 
-            case (_, _):
-                raise ValueError(
-                    "`HtmlNode` expects a `str` for `value` and a `list` for `children`."
-                )
-
         assert isinstance(props, dict), "`HtmlNode` expects a `dict` for `props`."
+        self.tag = tag
+        self.value = value
+        self.children = children
         self.props = props
 
-    def __repr__(self):
-        return f"HtmlNode(\ntag : {self.tag},\nvalue : {self.value},\nchildren : {self.children},\nprops : {util.string_of_dict(self.props)})"
+    def __repr__(self, level=0) -> str:
+        indent = "  " * level
+        children_repr = ""
+        if self.children:
+            children_repr = ",\n".join(
+                child.__repr__(level + 1) for child in self.children
+            )
+            children_repr = f",\n{children_repr}"
+        props_repr = (
+            ", ".join(f"'{key}': '{value}'" for key, value in self.props.items())
+            if self.props
+            else ""
+        )
+        node_repr = (
+            f"{indent}HtmlNode(\n"
+            f"{indent}  tag : '{self.tag}',\n"
+            f"{indent}  value : '{self.value}',\n"
+            f"{indent}  children : [{children_repr}],\n"
+            f"{indent}  props : {{{props_repr}}}"
+            f"\n{indent})"
+        )
+        return node_repr
 
     def to_html(self):
         raise NotImplementedError

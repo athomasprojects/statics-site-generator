@@ -5,7 +5,7 @@ def enum_values(enm: Enum) -> frozenset[str]:
     """
     Returns a `frozenset` of all the values in the enum.
     """
-    return frozenset({member.value for member in enm})
+    return frozenset([member.value for member in enm])
 
 
 def string_of_dict(d: dict) -> str:
@@ -19,5 +19,5 @@ def string_of_dict(d: dict) -> str:
             s += f"  {repr(k) if ':' not in k else k} : {v},\n"
         else:
             s += f"  {repr(k) if ':' not in k else k} : {v}\n"
-    s += "}\n"
+    s += "}"
     return s
