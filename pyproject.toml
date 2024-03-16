@@ -5,7 +5,9 @@ description = "Add your description here"
 authors = [
     { name = "Amanda Thomas", email = "amanda.thomas14@gmail.com" }
 ]
-dependencies = []
+dependencies = [
+    "ipython>=8.22.2",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
@@ -29,9 +31,15 @@ allow-direct-references = true
 packages = ["src/static_site_generator"]
 
 [tool.pyright]
+include=["src"]
+exclude = [ ".venv",
+    "**/__pycache__",
+]
 pythonPlatform = "Linux"
 pythonVersion = "3.12"
 venv = ".venv"
 venvPath = "."
 stubPath = "/home/thegusbus/stubs/python-type-stubs/main/stubs"
 
+[tool.ruff.format]
+docstring-code-format = true

@@ -2,7 +2,7 @@ import dataclasses
 from typing import Optional
 
 
-@dataclasses.dataclass(eq=True, slots=True)
+@dataclasses.dataclass(slots=True)
 class TextNode:
     text: str
     text_init: str
