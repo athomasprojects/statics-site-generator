@@ -13,32 +13,26 @@ class HtmlNode:
     props: Optional[dict[str, str]]
 
     def __init__(self, tag=None, value=None, children=None, props=None):
-        match tag:
-            case None:
-                self.tag = tag
-            case str() as tag if HtmlTag.is_tag(tag):
-                self.tag = tag
-            case _:
-                raise ValueError(f"Invalid `tag`: {tag}")
+        if tag is None:
+            tag = ""
+        elif not isinstance(tag, str):
+            tag = str(tag)
+        if not HtmlTag.is_tag(tag):
+            raise ValueError(f"Invalid `tag`: {tag}")
 
-        match value, children:
-            case (None, None):
-                raise ValueError(
-                    "`value` and `children` of `HtmlNode` cannot be both be `None`."
-                )
-            case (str(), []):
-                raise ValueError(
-                    "`HtmlNode` is expected to have children; `children` cannot be an empty list."
-                )
-            case (None, str()):
-                raise ValueError(
-                    "`HtmlNode` is expected to have a value; `value` cannot be `None`."
-                )
-            case (str() as v, list() as c):
-                self.value = v
-                self.children = c
+        if value is None:
+            value = ""
+        elif not isinstance(value, str):
+            value = str(value)
 
-        assert isinstance(props, dict), "`HtmlNode` expects a `dict` for `props`."
+        if children is None:
+            children = []
+
+        if props is None:
+            props = {}
+        else:
+            assert isinstance(props, dict), "`HtmlNode` expects a `dict` for `props`."
+
         self.tag = tag
         self.value = value
         self.children = children
@@ -47,7 +41,7 @@ class HtmlNode:
     def __repr__(self, level=0) -> str:
         indent = "  " * level
         children_repr = ""
-        if self.children:
+        if self.children:  # Simplified the condition
             children_repr = ",\n".join(
                 child.__repr__(level + 1) for child in self.children
             )

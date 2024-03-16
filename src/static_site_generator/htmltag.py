@@ -119,6 +119,7 @@ class HtmlTag:
         VAR = "var"
         VIDEO = "video"
         WBR = "wbr"
+        _EMPTY = ""
         _INVALID_TAG = "INVALID_TAG"
 
     _tag_set = util.enum_values(_Tag)

@@ -12,7 +12,8 @@ def main():
     children = [dummy] * 3
 
     t = TextNode(text, text_type, url)
-    h = HtmlNode(tag, url, children, props=props)
+    h = HtmlNode()
+    h2 = HtmlNode(tag, url, children, props=props)
 
     print(t)
     print(h)
