@@ -26,7 +26,7 @@ class TestHtmlNode(unittest.TestCase):
 
     def test_children_empty(self):
         node = HtmlNode()
-        self.assertEqual(node.children, [])
+        self.assertEqual(node.children, None)
 
     def test_children(self):
         value = "Ocaml my caml"
@@ -41,10 +41,10 @@ class TestHtmlNode(unittest.TestCase):
 
     def test_htmlnode_empty(self):
         node = HtmlNode()
-        self.assertEqual(node.tag, "")
-        self.assertEqual(node.value, "")
-        self.assertEqual(node.children, [])
-        self.assertEqual(node.props, {})
+        self.assertEqual(node.tag, None)
+        self.assertEqual(node.value, None)
+        self.assertEqual(node.children, None)
+        self.assertEqual(node.props, None)
 
     def test_htmlnode_init(self):
         tag = "!DOCTYPE"

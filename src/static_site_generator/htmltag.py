@@ -121,6 +121,7 @@ class HtmlTag:
         WBR = "wbr"
         _EMPTY = ""
         _INVALID_TAG = "INVALID_TAG"
+        _CLOSING_ANGLE_BRKT = ">"
 
     _tag_set = util.enum_values(_Tag)
 
@@ -142,6 +143,6 @@ class HtmlTag:
         (opening, closing) : opening and closing html tags for a given tag.
         """
         if cls.is_tag(tag):
-            return f"<{tag}>", f"</{tag}>"
+            return f"<{tag}", f"</{tag}>"
         else:
             return None
