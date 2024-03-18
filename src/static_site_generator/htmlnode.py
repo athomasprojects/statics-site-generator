@@ -29,6 +29,11 @@ class HtmlNode:
             if not isinstance(value, str):
                 value = str(value)
 
+        if children is not None:
+            assert isinstance(
+                children, list
+            ), "`HtmlNode` expects a `list` for `children`."
+
         if props is not None:
             assert isinstance(props, dict), "`HtmlNode` expects a `dict` for `props`."
 
@@ -76,7 +81,7 @@ class HtmlNode:
 
     def props_to_html(self) -> str:
         """
-        Returns a string of the html attributes of the node.
+        Returns a string of the attributes of the node in HTML syntax.
         """
         s = ""
         if self.props is not None:
@@ -98,7 +103,7 @@ class LeafNode(HtmlNode):
         self, tag: Optional[str], value: str, props: Optional[dict[str, str]] = None
     ):
         if value is None:
-            raise ValueError("`value` of a `LeafNode` cannot be None.")
+            raise ValueError("LeafNode `value` cannot be None")
 
         self.tag = tag
         self.value = value
@@ -113,3 +118,37 @@ class LeafNode(HtmlNode):
         else:
             opening, closing = HtmlTag.fmt_tag(self.tag)
             return f"{opening}{self.props_to_html()}{HtmlTag._Tag._CLOSING_ANGLE_BRKT.value}{self.value}{closing}"
+
+
+@dataclasses.dataclass(slots=True)
+class ParentNode(HtmlNode):
+    tag: str
+    children: list[HtmlNode]
+    props: Optional[dict[str, str]]
+
+    def __init__(
+        self,
+        tag: str,
+        children: list[HtmlNode],
+        props: Optional[dict[str, str]] = None,
+    ):
+        if tag is None:
+            raise ValueError("ParentNode `tag` cannot be None")
+        if children is None:
+            raise ValueError("ParentNode `children` cannot be None")
+        else:
+            if not isinstance(children, list):
+                raise ValueError(
+                    "ParentNode `children` must be a `list` of `HtmlNode`s"
+                )
+
+        self.tag = tag
+        self.children = children
+        self.props = props
+
+    def __post_init__(self):
+        super().__init__(self.tag, self.childen, props=self.props)
+
+    def to_html(self) -> str:
+        opening, closing = HtmlTag.fmt_tag(self.tag)
+        return f"{opening}{HtmlTag._Tag._CLOSING_ANGLE_BRKT.value}{''.join(child.to_html() for child in self.children)}{closing}"

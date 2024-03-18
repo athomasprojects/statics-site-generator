@@ -1,4 +1,4 @@
-from static_site_generator.htmlnode import HtmlNode, LeafNode
+from static_site_generator.htmlnode import HtmlNode, LeafNode, ParentNode
 from static_site_generator.textnode import TextNode
 
 
@@ -10,19 +10,30 @@ def main():
     dummy = HtmlNode("p", "dummy", props=props)
     children = [dummy] * 3
     tag = "a"
-    t = TextNode(text, text_type, url)
-    h = HtmlNode()
-    h2 = HtmlNode(tag=tag, value=url, children=children, props=props)
-    leaf = LeafNode("p", "This is a paragraph of text.")
-    leaf2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
-    leaf3 = LeafNode("div", "Click me!")
+    # t = TextNode(text, text_type, url)
+    # h = HtmlNode()
+    # leaf = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+    dummy_leaf = LeafNode("title", "leaf")
+    parent = ParentNode(
+        "p",
+        children=[
+            LeafNode("b", "Bold text"),
+            LeafNode(None, "Normal text"),
+            LeafNode("i", "italic text"),
+            LeafNode(None, "Normal text"),
+        ],
+    )
+    nested = ParentNode(
+        "p",
+        [dummy_leaf] + ([parent] * 3),
+    )
 
-    print(t)
-    print(h)
-    print(h2)
-    print(leaf.to_html())
-    print(leaf2.to_html())
-    print(leaf3.to_html())
+    double_nested = ParentNode("a", [nested])
+    # print(t)
+    # print(leaf.to_html())
+    # print(parent.to_html())
+    # print(nested.to_html())
+    print(double_nested.to_html())
 
 
 if __name__ == "__main__":

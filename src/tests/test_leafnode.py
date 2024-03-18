@@ -3,7 +3,7 @@ import unittest
 from static_site_generator.htmlnode import LeafNode
 
 
-class TestHtmlNode(unittest.TestCase):
+class TestLeafNode(unittest.TestCase):
     def test_value(self):
         tag = None
         value = "We have a value."
@@ -12,7 +12,7 @@ class TestHtmlNode(unittest.TestCase):
 
     def test_novalue(self):
         with self.assertRaises(
-            ValueError, msg="`value` of a `LeafNode` cannot be None."
+            ValueError, msg="`value` of a `LeafNode` cannot be None"
         ):
             LeafNode(tag=None, value=None)
 

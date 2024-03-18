@@ -1,3 +1,3 @@
 # static-site-generator
 
-Describe your project here.
+boot.dev static site generator project.
