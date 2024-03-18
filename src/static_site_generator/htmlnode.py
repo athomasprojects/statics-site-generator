@@ -88,21 +88,24 @@ class HtmlNode:
         return s
 
 
+@dataclasses.dataclass(slots=True)
 class LeafNode(HtmlNode):
     tag: Optional[str]
-    value: Optional[str]
-    props: Optional[dict[str, str]] = None
+    value: str
+    props: Optional[str] = None
 
     def __init__(
-        self,
-        tag: Optional[str],
-        value: Optional[str],
-        props: Optional[dict[str, str]] = None,
+        self, tag: Optional[str], value: str, props: Optional[dict[str, str]] = None
     ):
         if value is None:
             raise ValueError("`value` of a `LeafNode` cannot be None.")
 
-        super().__init__(tag, value, children=None, props=props)
+        self.tag = tag
+        self.value = value
+        self.props = props
+
+    def __post_init__(self):
+        super().__init__(self.tag, self.value, props=self.props)
 
     def to_html(self) -> str:
         if self.tag is None:
